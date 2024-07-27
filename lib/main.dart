@@ -112,15 +112,17 @@ Future<void> loadImportConfig(BuildContext context) async {
       }
     });
     appsProvider.addMissingCategories(settingsProvider);
-    
     showMessage(
-        '${tr('importedX', args: [plural('apps', value.key.length)])}${value.value ? ' + ${tr('settings')}' : ''}', 
-        context,
+      '${tr('importedX', args: [plural('apps', value.key.length)])}'
+      '${value.value ? ' + ${tr('settings')}' : ''}', 
+      context,
     );
   } catch (e) {
     showError(e, context);
   }
 }
+
+const String _versionKey = 'app_version';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -191,25 +193,27 @@ class _ObtainiumState extends State<Obtainium> {
     });
     if (!mounted) return;
 
-    var settingsProvider = context.read<SettingsProvider>();
-    var isFirstRun = settingsProvider.checkAndFlipFirstRun();
-    if (isFirstRun) {
-      await loadImportConfig(context);
-    }
+    await checkFirstRunAndUpdate();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
-    AppsProvider appsProvider = context.read<AppsProvider>();
-    LogsProvider logs = context.read<LogsProvider>();
+  Future<void> checkFirstRunAndUpdate() async {
+    final settingsProvider = context.read<SettingsProvider>();
+    final packageInfo = await PackageInfo.fromPlatform();
+    final currentVersion = packageInfo.version;
+    bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
 
-    if (settingsProvider.prefs == null) {
-      settingsProvider.initializeSettings();
-    } else {
-      bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
+    final prefs = await SharedPreferences.getInstance();
+    final lastVersion = prefs.getString(_versionKey) ?? '';
+
+    if (isFirstRun || currentVersion != lastVersion) {
+      await loadImportConfig(context);
+
+      // Requested permissions and add Obtainium to the apps list on the first run
       if (isFirstRun) {
-        logs.add('This is the first ever run of Obtainium.');
+        final logsProvider = context.read<LogsProvider>();
+        final appsProvider = context.read<AppsProvider>();
+
+        logsProvider.add('This is the first ever run of Obtainium.');
         Permission.notification.request();
         if (!fdroid) {
           getInstalledInfo(obtainiumId).then((value) {
@@ -238,12 +242,27 @@ class _ObtainiumState extends State<Obtainium> {
           });
         }
       }
+
+      await prefs.setString(_versionKey, currentVersion);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
+    AppsProvider appsProvider = context.read<AppsProvider>();
+    LogsProvider logs = context.read<LogsProvider>();
+
+    if (settingsProvider.prefs == null) {
+      settingsProvider.initializeSettings();
+    } else {
+      checkFirstRunAndUpdate();  // Ensure this check runs during the build phase as well
+
       if (!supportedLocales
-              .map((e) => e.key.languageCode)
-              .contains(context.locale.languageCode) ||
+          .map((e) => e.key.languageCode)
+          .contains(context.locale.languageCode) ||
           (settingsProvider.forcedLocale == null &&
-              context.deviceLocale.languageCode !=
-                  context.locale.languageCode)) {
+              context.deviceLocale.languageCode != context.locale.languageCode)) {
         settingsProvider.resetLocaleSafe(context);
       }
     }
