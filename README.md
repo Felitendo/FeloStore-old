@@ -1,7 +1,5 @@
 # ![FeloStore Icon](./assets/graphics/icon_small.png) FeloStore
 
-[![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
-
 Get Android App Updates Directly From the Source.
 
 FeloStore allows you to install and update apps directly from their releases pages, and receive notifications when new releases are made available.
