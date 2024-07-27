@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:obtainium/app_sources/html.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/html.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class DirectAPKLink extends AppSource {
   HTML html = HTML();

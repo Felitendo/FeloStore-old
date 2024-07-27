@@ -4,71 +4,71 @@ import 'package:android_package_installer/android_package_installer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:obtainium/providers/logs_provider.dart';
+import 'package:felostore/providers/logs_provider.dart';
 import 'package:provider/provider.dart';
 
-class ObtainiumError {
+class FeloStoreError {
   late String message;
   bool unexpected;
-  ObtainiumError(this.message, {this.unexpected = false});
+  FeloStoreError(this.message, {this.unexpected = false});
   @override
   String toString() {
     return message;
   }
 }
 
-class RateLimitError extends ObtainiumError {
+class RateLimitError extends FeloStoreError {
   late int remainingMinutes;
   RateLimitError(this.remainingMinutes)
       : super(plural('tooManyRequestsTryAgainInMinutes', remainingMinutes));
 }
 
-class InvalidURLError extends ObtainiumError {
+class InvalidURLError extends FeloStoreError {
   InvalidURLError(String sourceName)
       : super(tr('invalidURLForSource', args: [sourceName]));
 }
 
-class CredsNeededError extends ObtainiumError {
+class CredsNeededError extends FeloStoreError {
   CredsNeededError(String sourceName)
       : super(tr('requiresCredentialsInSettings', args: [sourceName]));
 }
 
-class NoReleasesError extends ObtainiumError {
+class NoReleasesError extends FeloStoreError {
   NoReleasesError({String? note})
       : super(
             '${tr('noReleaseFound')}${note?.isNotEmpty == true ? '\n\n$note' : ''}');
 }
 
-class NoAPKError extends ObtainiumError {
+class NoAPKError extends FeloStoreError {
   NoAPKError() : super(tr('noAPKFound'));
 }
 
-class NoVersionError extends ObtainiumError {
+class NoVersionError extends FeloStoreError {
   NoVersionError() : super(tr('noVersionFound'));
 }
 
-class UnsupportedURLError extends ObtainiumError {
+class UnsupportedURLError extends FeloStoreError {
   UnsupportedURLError() : super(tr('urlMatchesNoSource'));
 }
 
-class DowngradeError extends ObtainiumError {
+class DowngradeError extends FeloStoreError {
   DowngradeError() : super(tr('cantInstallOlderVersion'));
 }
 
-class InstallError extends ObtainiumError {
+class InstallError extends FeloStoreError {
   InstallError(int code)
       : super(PackageInstallerStatus.byCode(code).name.substring(7));
 }
 
-class IDChangedError extends ObtainiumError {
+class IDChangedError extends FeloStoreError {
   IDChangedError(String newId) : super('${tr('appIdMismatch')} - $newId');
 }
 
-class NotImplementedError extends ObtainiumError {
+class NotImplementedError extends FeloStoreError {
   NotImplementedError() : super(tr('functionNotImplemented'));
 }
 
-class MultiAppMultiError extends ObtainiumError {
+class MultiAppMultiError extends FeloStoreError {
   Map<String, dynamic> rawErrors = {};
   Map<String, List<String>> idsByErrorString = {};
   Map<String, String> appIdNames = {};
@@ -106,7 +106,7 @@ class MultiAppMultiError extends ObtainiumError {
 showMessage(dynamic e, BuildContext context, {bool isError = false}) {
   Provider.of<LogsProvider>(context, listen: false)
       .add(e.toString(), level: isError ? LogLevels.error : LogLevels.info);
-  if (e is String || (e is ObtainiumError && !e.unexpected)) {
+  if (e is String || (e is FeloStoreError && !e.unexpected)) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(e.toString())),
     );

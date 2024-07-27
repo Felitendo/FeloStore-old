@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class Jenkins extends AppSource {
   Jenkins() {
@@ -62,7 +62,7 @@ class Jenkins extends AppSource {
           releaseDate: releaseDate,
           AppNames(Uri.parse(standardUrl).host, standardUrl.split('/').last));
     } else {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 }

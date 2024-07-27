@@ -5,19 +5,19 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:obtainium/app_sources/github.dart';
-import 'package:obtainium/main.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/github.dart';
+import 'package:felostore/main.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_storage/shared_storage.dart' as saf;
 
-String obtainiumTempId = 'imranr98_obtainium_${GitHub().hosts[0]}';
-String obtainiumId = 'dev.imranr.obtainium';
-String obtainiumUrl = 'https://github.com/ImranR98/Obtainium';
-Color obtainiumThemeColor = const Color(0xFF6438B5);
+String felostoreTempId = 'Felitendo_felostore_${GitHub().hosts[0]}';
+String felostoreId = 'dev.felitendo.felostore';
+String felostoreUrl = 'https://github.com/Felitendo/FeloStore';
+Color felostoreThemeColor = const Color(0xFF6438B5);
 
 enum ThemeSettings { system, light, dark }
 
@@ -30,7 +30,7 @@ class SettingsProvider with ChangeNotifier {
   String? defaultAppDir;
   bool justStarted = true;
 
-  String sourceUrl = 'https://github.com/ImranR98/Obtainium';
+  String sourceUrl = 'https://github.com/Felitendo/FeloStore';
 
   // Not done in constructor as we want to be able to await it
   Future<void> initializeSettings() async {
@@ -70,7 +70,7 @@ class SettingsProvider with ChangeNotifier {
   Color get themeColor {
     int? colorCode = prefs?.getInt('themeColor');
     return (colorCode != null) ?
-        Color(colorCode) : obtainiumThemeColor;
+        Color(colorCode) : felostoreThemeColor;
   }
 
   set themeColor(Color themeColor) {

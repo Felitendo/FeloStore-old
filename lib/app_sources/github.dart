@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:obtainium/app_sources/html.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/logs_provider.dart';
-import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/html.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/logs_provider.dart';
+import 'package:felostore/providers/settings_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class GitHub extends AppSource {
@@ -254,7 +254,7 @@ class GitHub extends AppSource {
         if (onHttpErrorCode != null) {
           onHttpErrorCode(res);
         }
-        throw getObtainiumHttpError(res);
+        throw getFeloStoreHttpError(res);
       }
       latestRelease = jsonDecode(res.body);
     }
@@ -432,7 +432,7 @@ class GitHub extends AppSource {
       if (onHttpErrorCode != null) {
         onHttpErrorCode(res);
       }
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 
@@ -503,7 +503,7 @@ class GitHub extends AppSource {
       if (onHttpErrorCode != null) {
         onHttpErrorCode(res);
       }
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 

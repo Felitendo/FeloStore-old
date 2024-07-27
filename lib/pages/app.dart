@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:obtainium/components/generated_form_modal.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/main.dart';
-import 'package:obtainium/pages/apps.dart';
-import 'package:obtainium/pages/settings.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/components/generated_form_modal.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/main.dart';
+import 'package:felostore/pages/apps.dart';
+import 'package:felostore/pages/settings.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/settings_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
@@ -322,7 +322,7 @@ class _AppPageState extends State<AppPage> {
                   onWebResourceError: (WebResourceError error) {
                     if (error.isForMainFrame == true) {
                       showError(
-                          ObtainiumError(error.description, unexpected: true),
+                          FeloStoreError(error.description, unexpected: true),
                           context);
                     }
                   },

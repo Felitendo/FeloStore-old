@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class Signal extends AppSource {
   Signal() {
@@ -31,7 +31,7 @@ class Signal extends AppSource {
       return APKDetails(
           version, getApkUrlsFromUrls(apkUrls), AppNames(name, 'Signal'));
     } else {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 }
