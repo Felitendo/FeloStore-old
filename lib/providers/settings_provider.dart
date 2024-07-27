@@ -17,7 +17,7 @@ import 'package:shared_storage/shared_storage.dart' as saf;
 String felostoreTempId = 'felitendo_felostore_${GitHub().hosts[0]}';
 String felostoreId = 'dev.felitendo.felostore';
 String felostoreUrl = 'https://github.com/Felitendo/FeloStore';
-String duolingoId = 'com.duolingo'
+String duolingoId = 'com.duolingo';
 String duolingoUrl = 'https://git.felo.gg/FeloMods/Duolingo';
 Color felostoreThemeColor = const Color(0xFF6438B5);
 

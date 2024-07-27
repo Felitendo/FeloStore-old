@@ -20,7 +20,6 @@ import 'package:easy_localization/src/easy_localization_controller.dart';
 import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-// Required additional imports from import_export.dart
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:felostore/custom_errors.dart';
 import 'package:felostore/app_sources/fdroidrepo.dart';
@@ -112,11 +111,10 @@ Future<void> loadImportConfig(BuildContext context) async {
       }
     });
     appsProvider.addMissingCategories(settingsProvider);
-    
+
     showMessage(
-        '${tr('importedX', args: [plural('apps', value.key.length)])}${value.value ? ' + ${tr('settings')}' : ''}', 
-        context,
-    );
+        '${tr('importedX', args: [plural('apps', value.key.length)])}${value.value ? ' + ${tr('settings')}' : ''}',
+        context);
   } catch (e) {
     showError(e, context);
   }
@@ -130,6 +128,7 @@ void main() async {
     SecurityContext.defaultContext
         .setTrustedCertificatesBytes(data.buffer.asUint8List());
   } catch (e) {
+    print(e);
   }
   await EasyLocalization.ensureInitialized();
   if ((await DeviceInfoPlugin().androidInfo).version.sdkInt >= 29) {
@@ -199,90 +198,96 @@ class _FeloStoreState extends State<FeloStore> {
   }
 
   @override
-Widget build(BuildContext context) {
-  SettingsProvider settingsProvider = context.watch<SettingsProvider>();
-  AppsProvider appsProvider = context.read<AppsProvider>();
-  LogsProvider logs = context.read<LogsProvider>();
+  Widget build(BuildContext context) {
+    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
+    AppsProvider appsProvider = context.read<AppsProvider>();
+    LogsProvider logs = context.read<LogsProvider>();
 
-  if (settingsProvider.prefs == null) {
-    settingsProvider.initializeSettings();
-  } else {
-    bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
-    if (isFirstRun) {
-      logs.add('This is the first ever run of FeloStore.');
-      Permission.notification.request();
+    if (settingsProvider.prefs == null) {
+      settingsProvider.initializeSettings();
+    } else {
+      bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
+      if (isFirstRun) {
+        logs.add('This is the first ever run of FeloStore.');
+        Permission.notification.request();
 
-      if (!fdroid) {
-        getInstalledInfo(felostoreId).then((value) {
-          if (value?.versionName != null) {
-            appsProvider.saveApps([
-              App(
-                id: felostoreId,
-                url: felostoreUrl,
-                author: 'Felitendo',
-                name: 'FeloStore',
-                installedVersion: value!.versionName,
-                latestVersion: value.versionName!,
-                additionalSettings: {
-                  'versionDetection': true,
-                  'apkFilterRegEx': 'fdroid',
-                  'invertAPKFilter': true
-                },
-                pinned: false,
-                categories: [],
-              )
-            ], onlyIfExists: false);
-          }
-        }).catchError((err) {
-          print(err);
-        });
+        if (!fdroid) {
+          getInstalledInfo(felostoreId).then((value) {
+            if (value?.versionName != null) {
+              appsProvider.saveApps([
+                App(
+                  id: felostoreId,
+                  url: felostoreUrl,
+                  author: 'Felitendo',
+                  name: 'FeloStore',
+                  installedVersion: value!.versionName,
+                  latestVersion: value.versionName!,
+                  additionalSettings: {
+                    'versionDetection': true,
+                    'apkFilterRegEx': 'fdroid',
+                    'invertAPKFilter': true
+                  },
+                  pinned: false,
+                  categories: [],
+                )
+              ], onlyIfExists: false);
+            }
+          }).catchError((err) {
+            print(err);
+          });
 
-        getInstalledInfo(duolingoId).then((value) {
-          if (value?.versionName != null) {
-            appsProvider.saveApps([
-          App(
-            id: duolingoId,
-            url: duolingoUrl,
-            author: 'FeloMods',
-            name: 'Duolingo',
-            installedVersion: value!.versionName,
-            latestVersion: value.versionName!,
-            additionalSettings: {
-                'includePrereleases': false,
-                'fallbackToOlderReleases': true,
-                'filterReleaseTitlesByRegEx': '',
-                'filterReleaseNotesByRegEx': '',
-                'verifyLatestTag': false,
-                'dontSortReleasesList': false,
-                'useLatestAssetDateAsReleaseDate': false,
-                'trackOnly': false,
-                'versionExtractionRegEx': '',
-                'matchGroupToUse': '',
-                'versionDetection': true,
-                'useVersionCodeAsOSVersion': false,
-                'apkFilterRegEx': '',
-                'invertAPKFilter': false,
-                'autoApkFilterByArch': true,
-                'appName': '',
-                'shizukuPretendToBeGooglePlay': false,
-                'exemptFromBackgroundUpdates': false,
-                'skipUpdateNotifications': false,
-                'about': ''
-                },
-            pinned: false,
-            categories: [],
-            overrideSource: 'Codeberg',
-          ),
-        ], onlyIfExists: false);
-          }
+          getInstalledInfo(duolingoId).then((value) {
+            if (value?.versionName != null) {
+              appsProvider.saveApps([
+                App(
+                  id: duolingoId,
+                  url: duolingoUrl,
+                  author: 'FeloMods',
+                  name: 'Duolingo',
+                  installedVersion: value!.versionName,
+                  latestVersion: value.versionName!,
+                  additionalSettings: {
+                    'includePrereleases': false,
+                    'fallbackToOlderReleases': true,
+                    'filterReleaseTitlesByRegEx': '',
+                    'filterReleaseNotesByRegEx': '',
+                    'verifyLatestTag': false,
+                    'dontSortReleasesList': false,
+                    'useLatestAssetDateAsReleaseDate': false,
+                    'trackOnly': false,
+                    'versionExtractionRegEx': '',
+                    'matchGroupToUse': '',
+                    'versionDetection': true,
+                    'useVersionCodeAsOSVersion': false,
+                    'apkFilterRegEx': '',
+                    'invertAPKFilter': false,
+                    'autoApkFilterByArch': true,
+                    'appName': '',
+                    'shizukuPretendToBeGooglePlay': false,
+                    'exemptFromBackgroundUpdates': false,
+                    'skipUpdateNotifications': false,
+                    'about': ''
+                  },
+                  pinned: false,
+                  categories: [],
+                  overrideSource: 'Codeberg',
+                )
+              ], onlyIfExists: false);
+            }
+          }).catchError((err) {
+            print(err);
+          });
+        }
       }
     }
-    if (!supportedLocales.map((e) => e.key.languageCode).contains(context.locale.languageCode) ||
-        (settingsProvider.forcedLocale == null && context.deviceLocale.languageCode != context.locale.languageCode)) {
+
+    if (!supportedLocales
+            .map((e) => e.key.languageCode)
+            .contains(context.locale.languageCode) ||
+        (settingsProvider.forcedLocale == null &&
+            context.deviceLocale.languageCode != context.locale.languageCode)) {
       settingsProvider.resetLocaleSafe(context);
     }
-  }
-}
 
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
@@ -319,15 +324,13 @@ Widget build(BuildContext context) {
               colorScheme: settingsProvider.theme == ThemeSettings.dark
                   ? darkColorScheme
                   : lightColorScheme,
-              fontFamily:
-                  settingsProvider.useSystemFont ? 'SystemFont' : 'Metropolis'),
+              fontFamily: settingsProvider.useSystemFont ? 'SystemFont' : 'Metropolis'),
           darkTheme: ThemeData(
               useMaterial3: true,
               colorScheme: settingsProvider.theme == ThemeSettings.light
                   ? lightColorScheme
                   : darkColorScheme,
-              fontFamily:
-                  settingsProvider.useSystemFont ? 'SystemFont' : 'Metropolis'),
+              fontFamily: settingsProvider.useSystemFont ? 'SystemFont' : 'Metropolis'),
           home: Shortcuts(shortcuts: <LogicalKeySet, Intent>{
             LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
           }, child: const HomePage()));
