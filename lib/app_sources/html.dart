@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 String ensureAbsoluteUrl(String ambiguousUrl, Uri referenceAbsoluteUrl) {
   try {
@@ -230,7 +230,7 @@ class HTML extends AppSource {
   Future<List<MapEntry<String, String>>> grabLinksCommon(
       Response res, Map<String, dynamic> additionalSettings) async {
     if (res.statusCode != 200) {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
     var html = parse(res.body);
     List<MapEntry<String, String>> allLinks = html

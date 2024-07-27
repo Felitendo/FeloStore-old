@@ -1,6 +1,6 @@
-import 'package:obtainium/app_sources/github.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/github.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class Codeberg extends AppSource {
   GitHub gh = GitHub();

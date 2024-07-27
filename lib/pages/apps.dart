@@ -4,16 +4,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:obtainium/components/custom_app_bar.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/components/generated_form_modal.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/main.dart';
-import 'package:obtainium/pages/app.dart';
-import 'package:obtainium/pages/settings.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/components/custom_app_bar.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/components/generated_form_modal.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/main.dart';
+import 'package:felostore/pages/app.dart';
+import 'package:felostore/pages/settings.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/settings_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -887,7 +887,7 @@ class AppsPageState extends State<AppsPage> {
                             }
                             urls = urls.substring(0, urls.length - 1);
                             Share.share(urls,
-                                subject: 'Obtainium - ${tr('appsString')}');
+                                subject: 'FeloStore - ${tr('appsString')}');
                             Navigator.of(context).pop();
                           },
                           child: Text(tr('shareSelectedAppURLs'))),
@@ -899,7 +899,7 @@ class AppsPageState extends State<AppsPage> {
                                   String urls = '';
                                   for (var a in selectedApps) {
                                     urls +=
-                                        'https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/${Uri.encodeComponent(jsonEncode({
+                                        'https://apps.felostore.felitendo.dev/redirect?r=felostore://app/${Uri.encodeComponent(jsonEncode({
                                           'id': a.id,
                                           'url': a.url,
                                           'author': a.author,
@@ -913,7 +913,7 @@ class AppsPageState extends State<AppsPage> {
                                   }
                                   Share.share(urls,
                                       subject:
-                                          'Obtainium - ${tr('appsString')}');
+                                          'FeloStore - ${tr('appsString')}');
                                 },
                           child: Text(tr('shareAppConfigLinks'))),
                       const Divider(),

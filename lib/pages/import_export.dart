@@ -4,14 +4,14 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:obtainium/app_sources/fdroidrepo.dart';
-import 'package:obtainium/components/custom_app_bar.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/components/generated_form_modal.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/fdroidrepo.dart';
+import 'package:felostore/components/custom_app_bar.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/components/generated_form_modal.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/settings_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -103,7 +103,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
       });
     }
 
-    runObtainiumExport({bool pickOnly = false}) async {
+    runFeloStoreExport({bool pickOnly = false}) async {
       HapticFeedback.selectionClick();
       appsProvider
           .export(
@@ -119,7 +119,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
       });
     }
 
-    runObtainiumImport() {
+    runFeloStoreImport() {
       HapticFeedback.selectionClick();
       FilePicker.platform.pickFiles().then((result) {
         setState(() {
@@ -130,7 +130,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
           try {
             jsonDecode(data);
           } catch (e) {
-            throw ObtainiumError(tr('invalidInput'));
+            throw FeloStoreError(tr('invalidInput'));
           }
           appsProvider.import(data).then((value) {
             var cats = settingsProvider.categories;
@@ -250,7 +250,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
               }
             }
           } else {
-            throw ObtainiumError(tr('noResults'));
+            throw FeloStoreError(tr('noResults'));
           }
         }
       }()
@@ -346,7 +346,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
                                             importInProgress
                                         ? null
                                         : () {
-                                            runObtainiumExport(pickOnly: true);
+                                            runFeloStoreExport(pickOnly: true);
                                           },
                                     child: Text(tr('pickExportDir'),
                                         textAlign: TextAlign.center),
@@ -361,8 +361,8 @@ class _ImportExportPageState extends State<ImportExportPage> {
                                             importInProgress ||
                                             snapshot.data == null
                                         ? null
-                                        : runObtainiumExport,
-                                    child: Text(tr('obtainiumExport'),
+                                        : runFeloStoreExport,
+                                    child: Text(tr('felostoreExport'),
                                         textAlign: TextAlign.center),
                                   )),
                                 ],
@@ -377,8 +377,8 @@ class _ImportExportPageState extends State<ImportExportPage> {
                                           style: outlineButtonStyle,
                                           onPressed: importInProgress
                                               ? null
-                                              : runObtainiumImport,
-                                          child: Text(tr('obtainiumImport'),
+                                              : runFeloStoreImport,
+                                          child: Text(tr('felostoreImport'),
                                               textAlign: TextAlign.center))),
                                 ],
                               ),

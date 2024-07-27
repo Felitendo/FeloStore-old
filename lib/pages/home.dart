@@ -5,15 +5,15 @@ import 'package:app_links/app_links.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:obtainium/components/generated_form_modal.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/pages/add_app.dart';
-import 'package:obtainium/pages/apps.dart';
-import 'package:obtainium/pages/import_export.dart';
-import 'package:obtainium/pages/settings.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/components/generated_form_modal.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/pages/add_app.dart';
+import 'package:felostore/pages/apps.dart';
+import 'package:felostore/pages/import_export.dart';
+import 'package:felostore/pages/settings.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/settings_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
             });
           }
         } else {
-          throw ObtainiumError(tr('unknown'));
+          throw FeloStoreError(tr('unknown'));
         }
       } catch (e) {
         showError(e, context);

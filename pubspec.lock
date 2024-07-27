@@ -15,7 +15,7 @@ packages:
       path: "."
       ref: main
       resolved-ref: ba2aa7a11edc2649d1d80c25ed9291521262f714
-      url: "https://github.com/ImranR98/android_package_installer"
+      url: "https://github.com/Felitendo/android_package_installer"
     source: git
     version: "0.0.1"
   android_package_manager:

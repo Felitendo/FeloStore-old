@@ -1,4 +1,4 @@
-name: obtainium
+name: felostore
 description: Get Android App Updates Directly From the Source.
 
 # The following line prevents the package from being accidentally published to
@@ -53,7 +53,7 @@ dependencies:
   animations: ^2.0.4
   android_package_installer:
     git:
-      url: https://github.com/ImranR98/android_package_installer
+      url: https://github.com/Felitendo/android_package_installer
       ref: main
   android_package_manager: ^0.7.0
   share_plus: ^9.0.0

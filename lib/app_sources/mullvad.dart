@@ -1,8 +1,8 @@
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
-import 'package:obtainium/app_sources/github.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/github.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class Mullvad extends AppSource {
   Mullvad() {
@@ -65,7 +65,7 @@ class Mullvad extends AppSource {
           AppNames(name, 'Mullvad-VPN'),
           changeLog: changeLog);
     } else {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 }

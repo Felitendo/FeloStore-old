@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:obtainium/pages/home.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/logs_provider.dart';
-import 'package:obtainium/providers/native_provider.dart';
-import 'package:obtainium/providers/notifications_provider.dart';
-import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/pages/home.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/logs_provider.dart';
+import 'package:felostore/providers/native_provider.dart';
+import 'package:felostore/providers/notifications_provider.dart';
+import 'package:felostore/providers/settings_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -115,19 +115,19 @@ void main() async {
         path: localeDir,
         fallbackLocale: fallbackLocale,
         useOnlyLangCode: true,
-        child: const Obtainium()),
+        child: const FeloStore()),
   ));
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 }
 
-class Obtainium extends StatefulWidget {
-  const Obtainium({super.key});
+class FeloStore extends StatefulWidget {
+  const FeloStore({super.key});
 
   @override
-  State<Obtainium> createState() => _ObtainiumState();
+  State<FeloStore> createState() => _FeloStoreState();
 }
 
-class _ObtainiumState extends State<Obtainium> {
+class _FeloStoreState extends State<FeloStore> {
   var existingUpdateInterval = -1;
 
   @override
@@ -168,18 +168,18 @@ class _ObtainiumState extends State<Obtainium> {
     } else {
       bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
       if (isFirstRun) {
-        logs.add('This is the first ever run of Obtainium.');
-        // If this is the first run, ask for notification permissions and add Obtainium to the Apps list
+        logs.add('This is the first ever run of FeloStore.');
+        // If this is the first run, ask for notification permissions and add FeloStore to the Apps list
         Permission.notification.request();
         if (!fdroid) {
-          getInstalledInfo(obtainiumId).then((value) {
+          getInstalledInfo(felostoreId).then((value) {
             if (value?.versionName != null) {
               appsProvider.saveApps([
                 App(
-                    obtainiumId,
-                    obtainiumUrl,
-                    'ImranR98',
-                    'Obtainium',
+                    felostoreId,
+                    felostoreUrl,
+                    'Felitendo',
+                    'FeloStore',
                     value!.versionName,
                     value.versionName!,
                     [],
@@ -235,7 +235,7 @@ class _ObtainiumState extends State<Obtainium> {
       if (settingsProvider.useSystemFont) NativeFeatures.loadSystemFont();
 
       return MaterialApp(
-          title: 'Obtainium',
+          title: 'FeloStore',
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,

@@ -7,32 +7,32 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart';
-import 'package:obtainium/app_sources/apkmirror.dart';
-import 'package:obtainium/app_sources/apkpure.dart';
-import 'package:obtainium/app_sources/aptoide.dart';
-import 'package:obtainium/app_sources/codeberg.dart';
-import 'package:obtainium/app_sources/directAPKLink.dart';
-import 'package:obtainium/app_sources/fdroid.dart';
-import 'package:obtainium/app_sources/fdroidrepo.dart';
-import 'package:obtainium/app_sources/github.dart';
-import 'package:obtainium/app_sources/gitlab.dart';
-import 'package:obtainium/app_sources/huaweiappgallery.dart';
-import 'package:obtainium/app_sources/izzyondroid.dart';
-import 'package:obtainium/app_sources/html.dart';
-import 'package:obtainium/app_sources/jenkins.dart';
-import 'package:obtainium/app_sources/neutroncode.dart';
-import 'package:obtainium/app_sources/signal.dart';
-import 'package:obtainium/app_sources/sourceforge.dart';
-import 'package:obtainium/app_sources/sourcehut.dart';
-import 'package:obtainium/app_sources/steammobile.dart';
-import 'package:obtainium/app_sources/telegramapp.dart';
-import 'package:obtainium/app_sources/uptodown.dart';
-import 'package:obtainium/app_sources/vlc.dart';
-import 'package:obtainium/app_sources/whatsapp.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/mass_app_sources/githubstars.dart';
-import 'package:obtainium/providers/settings_provider.dart';
+import 'package:felostore/app_sources/apkmirror.dart';
+import 'package:felostore/app_sources/apkpure.dart';
+import 'package:felostore/app_sources/aptoide.dart';
+import 'package:felostore/app_sources/codeberg.dart';
+import 'package:felostore/app_sources/directAPKLink.dart';
+import 'package:felostore/app_sources/fdroid.dart';
+import 'package:felostore/app_sources/fdroidrepo.dart';
+import 'package:felostore/app_sources/github.dart';
+import 'package:felostore/app_sources/gitlab.dart';
+import 'package:felostore/app_sources/huaweiappgallery.dart';
+import 'package:felostore/app_sources/izzyondroid.dart';
+import 'package:felostore/app_sources/html.dart';
+import 'package:felostore/app_sources/jenkins.dart';
+import 'package:felostore/app_sources/neutroncode.dart';
+import 'package:felostore/app_sources/signal.dart';
+import 'package:felostore/app_sources/sourceforge.dart';
+import 'package:felostore/app_sources/sourcehut.dart';
+import 'package:felostore/app_sources/steammobile.dart';
+import 'package:felostore/app_sources/telegramapp.dart';
+import 'package:felostore/app_sources/uptodown.dart';
+import 'package:felostore/app_sources/vlc.dart';
+import 'package:felostore/app_sources/whatsapp.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/mass_app_sources/githubstars.dart';
+import 'package:felostore/providers/settings_provider.dart';
 
 class AppNames {
   late String author;
@@ -59,7 +59,7 @@ stringMapListTo2DList(List<MapEntry<String, String>> mapList) =>
 assumed2DlistToStringMapList(List<dynamic> arr) =>
     arr.map((e) => MapEntry(e[0] as String, e[1] as String)).toList();
 
-// App JSON schema has changed multiple times over the many versions of Obtainium
+// App JSON schema has changed multiple times over the many versions of FeloStore
 // This function takes an App JSON and modifies it if needed to conform to the latest (current) version
 appJSONCompatibilityModifiers(Map<String, dynamic> json) {
   var source = SourceProvider()
@@ -640,8 +640,8 @@ abstract class AppSource {
   }
 }
 
-ObtainiumError getObtainiumHttpError(Response res) {
-  return ObtainiumError((res.reasonPhrase != null &&
+FeloStoreError getFeloStoreHttpError(Response res) {
+  return FeloStoreError((res.reasonPhrase != null &&
           res.reasonPhrase != null &&
           res.reasonPhrase!.isNotEmpty)
       ? res.reasonPhrase!
@@ -931,7 +931,7 @@ class SourceProvider {
     for (var url in urls) {
       try {
         if (alreadyAddedUrls.contains(url)) {
-          throw ObtainiumError(tr('appAlreadyAdded'));
+          throw FeloStoreError(tr('appAlreadyAdded'));
         }
         var source = sourceOverride ?? getSource(url);
         apps.add(await getApp(
