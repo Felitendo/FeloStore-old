@@ -1,7 +1,5 @@
 # ![Obtainium Icon](./assets/graphics/icon_small.png) Obtainium
 
-[![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
-
 Get Android App Updates Directly From the Source.
 
 Obtainium allows you to install and update apps directly from their releases pages, and receive notifications when new releases are made available.
@@ -50,6 +48,7 @@ Or, contribute some configurations to the website by creating a PR at [this repo
 
 [<img src="https://github.com/machiav3lli/oandbackupx/blob/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png"
     alt="Get it on GitHub"
+<<<<<<< Updated upstream
     height="80">](https://github.com/ImranR98/Obtainium/releases)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
@@ -59,6 +58,9 @@ Or, contribute some configurations to the website by creating a PR at [this repo
     height="80">](https://f-droid.org/packages/dev.imranr.obtainium.fdroid/)
      
 [PGP Public Key](https://keyserver.ubuntu.com/pks/lookup?search=contact%40imranr.dev&fingerprint=on&op=index)
+=======
+    height="80">](https://github.com/Felitendo/FeloStore/releases)
+>>>>>>> Stashed changes
 
 ## Limitations
 - For some sources, data is gathered using Web scraping and can easily break due to changes in website design. In such cases, more reliable methods may be unavailable.

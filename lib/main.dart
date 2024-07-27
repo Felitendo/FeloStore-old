@@ -103,10 +103,14 @@ void main() async {
     );
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
+
+  final settingsProvider = SettingsProvider();
+  await settingsProvider.initializeSettings();
+
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (context) => AppsProvider()),
-      ChangeNotifierProvider(create: (context) => SettingsProvider()),
+      ChangeNotifierProvider(create: (context) => AppsProvider(isBg: false)),
+      ChangeNotifierProvider(create: (context) => settingsProvider),
       Provider(create: (context) => NotificationsProvider()),
       Provider(create: (context) => LogsProvider())
     ],

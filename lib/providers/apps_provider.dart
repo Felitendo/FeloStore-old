@@ -401,8 +401,36 @@ class AppsProvider with ChangeNotifier {
           }
         });
       }
+      // Ensure Duolingo app is added if this is the first run
+      await addPreinstalledApps();
     }();
   }
+
+  Future<void> addPreinstalledApps() async {
+    // Check if the app list is empty or it’s the first run
+    if (settingsProvider.isFirstRun()) {
+      App duolingoApp = App(
+        'duolingo',
+        'https://git.felo.gg/FeloMods/Duolingo',
+        'Duolingo Inc.',
+        'Duolingo',
+        '0.0.1',
+        '1.0.0',
+        [],
+        0,
+        {
+          'versionDetection': true,
+          'apkFilterRegEx': 'fdroid',
+          'invertAPKFilter': true
+          'source_provider': 'codeberg.org'
+        },
+        null,
+        false
+      );
+      await saveApps([duolingoApp], onlyIfExists: false);
+    }
+  }
+
 
   Future<File> handleAPKIDChange(App app, PackageInfo newInfo,
       File downloadedFile, String downloadUrl) async {
