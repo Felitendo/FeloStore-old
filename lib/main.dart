@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert'; // Neu für jsonDecode
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,8 +16,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'dart:convert'; // Für jsonDecode hinzufügen
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show rootBundle; // Spezifischer Import
 
 // ignore: implementation_imports
 import 'package:easy_localization/src/easy_localization_controller.dart';
