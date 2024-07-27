@@ -15,7 +15,6 @@ import 'package:obtainium/providers/source_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 class ImportExportPage extends StatefulWidget {
   const ImportExportPage({super.key});
@@ -27,53 +26,6 @@ class ImportExportPage extends StatefulWidget {
 // Bestehende Klasse aktualisiert
 class _ImportExportPageState extends State<ImportExportPage> {
   bool importInProgress = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Lade die Importkonfiguration automatisch
-    loadImportConfig();
-  }
-
-  Future<void> loadImportConfig() async {
-    try {
-      // Pfad zur Konfigurationsdatei im Assets-Verzeichnis
-      const configFilePath = 'assets/config.json';
-
-      // Lade die Konfigurationsdatei aus den Assets
-      String data = await rootBundle.loadString(configFilePath);
-
-      // Überprüfe ob die Datei gültige JSON-Daten enthält
-      jsonDecode(data);
-
-      // Importiere die Daten
-      setState(() {
-        importInProgress = true;
-      });
-      var appsProvider = context.read<AppsProvider>(); // Kontext beachten
-      var settingsProvider = context.read<SettingsProvider>(); // Kontext beachten
-      var value = await appsProvider.import(data);
-      var cats = settingsProvider.categories;
-      appsProvider.apps.forEach((key, value) {
-        for (var c in value.app.categories) {
-          if (!cats.containsKey(c)) {
-            cats[c] = generateRandomLightColor().value;
-          }
-        }
-      });
-      appsProvider.addMissingCategories(settingsProvider);
-      showMessage(
-        '${tr('importedX', args: [plural('apps', value.key.length)])}${value.value ? ' + ${tr('settings')}' : ''}', 
-        context,
-      );
-    } catch (e) {
-      showError(e, context);
-    } finally {
-      setState(() {
-        importInProgress = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
