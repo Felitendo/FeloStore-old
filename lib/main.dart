@@ -16,6 +16,8 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/src/easy_localization_controller.dart';
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 // Required additional imports from import_export.dart
