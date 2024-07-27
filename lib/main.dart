@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:convert'; // Neu für jsonDecode
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,20 +9,15 @@ import 'package:obtainium/providers/logs_provider.dart';
 import 'package:obtainium/providers/native_provider.dart';
 import 'package:obtainium/providers/notifications_provider.dart';
 import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:flutter/services.dart' show rootBundle; // Spezifischer Import
-
-// ignore: implementation_imports
-import 'package:easy_localization/src/easy_localization_controller.dart';
-// ignore: implementation_imports
-import 'package:easy_localization/src/localization.dart';
+import 'package:flutter/services.dart' show rootBundle; // Specific import
 
 List<MapEntry<Locale, String>> supportedLocales = const [
   MapEntry(Locale('en'), 'English'),
@@ -53,7 +48,6 @@ var fdroid = false;
 final globalNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> loadTranslations() async {
-  // See easy_localization/issues/210
   await EasyLocalizationController.initEasyLocation();
   var s = SettingsProvider();
   await s.initializeSettings();
@@ -138,6 +132,7 @@ class _ObtainiumState extends State<Obtainium> {
   void initState() {
     super.initState();
     initPlatformState();
+    initFirstRun();
   }
 
   Future<void> initPlatformState() async {
@@ -161,6 +156,40 @@ class _ObtainiumState extends State<Obtainium> {
     if (!mounted) return;
   }
 
+  Future<void> initFirstRun() async {
+    SettingsProvider settingsProvider = context.read<SettingsProvider>();
+    bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
+    if (isFirstRun) {
+      await loadImportConfig(context);
+    }
+  }
+
+  Future<void> loadImportConfig(BuildContext context) async {
+    try {
+      const configFilePath = 'assets/config.json';
+      String data = await rootBundle.loadString(configFilePath);
+      jsonDecode(data);
+      var appsProvider = context.read<AppsProvider>();
+      var settingsProvider = context.read<SettingsProvider>();
+      var value = await appsProvider.import(data);
+      var cats = settingsProvider.categories;
+      appsProvider.apps.forEach((key, value) {
+        for (var c in value.app.categories) {
+          if (!cats.containsKey(c)) {
+            cats[c] = generateRandomLightColor().value;
+          }
+        }
+      });
+      appsProvider.addMissingCategories(settingsProvider);
+      showMessage(
+        '${tr('importedX', args: [plural('apps', value.key.length)])}${value.value ? ' + ${tr('settings')}' : ''}',
+        context,
+      );
+    } catch (e) {
+      showError(e, context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = context.watch<SettingsProvider>();
@@ -173,7 +202,6 @@ class _ObtainiumState extends State<Obtainium> {
       bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
       if (isFirstRun) {
         logs.add('This is the first ever run of Obtainium.');
-        // If this is the first run, ask for notification permissions and add Obtainium to the Apps list
         Permission.notification.request();
         if (!fdroid) {
           getInstalledInfo(obtainiumId).then((value) {
@@ -214,7 +242,6 @@ class _ObtainiumState extends State<Obtainium> {
 
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      // Decide on a colour/brightness scheme based on OS and user settings
       ColorScheme lightColorScheme;
       ColorScheme darkColorScheme;
       if (lightDynamic != null &&
@@ -230,7 +257,6 @@ class _ObtainiumState extends State<Obtainium> {
             brightness: Brightness.dark);
       }
 
-      // set the background and surface colors to pure black in the amoled theme
       if (settingsProvider.useBlackTheme) {
         darkColorScheme =
             darkColorScheme.copyWith(surface: Colors.black).harmonized();
