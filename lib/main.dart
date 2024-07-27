@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -15,10 +16,17 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:easy_localization/easy_localization.dart';
-// ignore: implementation_imports
 import 'package:easy_localization/src/easy_localization_controller.dart';
-// ignore: implementation_imports
 import 'package:easy_localization/src/localization.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+// Required additional imports from import_export.dart
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:obtainium/custom_errors.dart';
+import 'package:obtainium/app_sources/fdroidrepo.dart';
+import 'package:obtainium/components/custom_app_bar.dart';
+import 'package:obtainium/components/generated_form.dart';
+import 'package:obtainium/components/generated_form_modal.dart';
 
 List<MapEntry<Locale, String>> supportedLocales = const [
   MapEntry(Locale('en'), 'English'),
@@ -49,7 +57,6 @@ var fdroid = false;
 final globalNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> loadTranslations() async {
-  // See easy_localization/issues/210
   await EasyLocalizationController.initEasyLocation();
   var s = SettingsProvider();
   await s.initializeSettings();
@@ -86,6 +93,35 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   BackgroundFetch.finish(taskId);
 }
 
+Future<void> loadImportConfig(BuildContext context) async {
+  try {
+    const configFilePath = 'assets/config.json';
+    String data = await rootBundle.loadString(configFilePath);
+    jsonDecode(data);
+
+    var appsProvider = context.read<AppsProvider>();
+    var settingsProvider = context.read<SettingsProvider>();
+    var value = await appsProvider.import(data);
+    var cats = settingsProvider.categories;
+
+    appsProvider.apps.forEach((key, value) {
+      for (var c in value.app.categories) {
+        if (!cats.containsKey(c)) {
+          cats[c] = generateRandomLightColor().value;
+        }
+      }
+    });
+    appsProvider.addMissingCategories(settingsProvider);
+    
+    showMessage(
+        '${tr('importedX', args: [plural('apps', value.key.length)])}${value.value ? ' + ${tr('settings')}' : ''}', 
+        context,
+    );
+  } catch (e) {
+    showError(e, context);
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
@@ -94,7 +130,6 @@ void main() async {
     SecurityContext.defaultContext
         .setTrustedCertificatesBytes(data.buffer.asUint8List());
   } catch (e) {
-    // Already added, do nothing (see #375)
   }
   await EasyLocalization.ensureInitialized();
   if ((await DeviceInfoPlugin().androidInfo).version.sdkInt >= 29) {
@@ -155,6 +190,12 @@ class _FeloStoreState extends State<FeloStore> {
       BackgroundFetch.finish(taskId);
     });
     if (!mounted) return;
+
+    var settingsProvider = context.read<SettingsProvider>();
+    var isFirstRun = settingsProvider.checkAndFlipFirstRun();
+    if (isFirstRun) {
+      await loadImportConfig(context);
+    }
   }
 
   @override
@@ -210,7 +251,6 @@ class _FeloStoreState extends State<FeloStore> {
 
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-      // Decide on a colour/brightness scheme based on OS and user settings
       ColorScheme lightColorScheme;
       ColorScheme darkColorScheme;
       if (lightDynamic != null &&
@@ -226,7 +266,6 @@ class _FeloStoreState extends State<FeloStore> {
             brightness: Brightness.dark);
       }
 
-      // set the background and surface colors to pure black in the amoled theme
       if (settingsProvider.useBlackTheme) {
         darkColorScheme =
             darkColorScheme.copyWith(surface: Colors.black).harmonized();
