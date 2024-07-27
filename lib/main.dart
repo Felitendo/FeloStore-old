@@ -18,8 +18,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/services.dart' show rootBundle; // Specific import
 
-// Replace this with your App model definition.
-import 'package:obtainium/models/app.dart';
+import 'package:obtainium/pages/apps.dart';
 
 List<MapEntry<Locale, String>> supportedLocales = const [
   MapEntry(Locale('en'), 'English'),
