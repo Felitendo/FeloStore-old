@@ -216,19 +216,21 @@ class _FeloStoreState extends State<FeloStore> {
             if (value?.versionName != null) {
               appsProvider.saveApps([
                 App(
-                  id: felostoreId,
-                  url: felostoreUrl,
-                  author: 'Felitendo',
-                  name: 'FeloStore',
-                  installedVersion: value!.versionName,
-                  latestVersion: value.versionName!,
-                  additionalSettings: {
+                  felostoreId,
+                  felostoreUrl,
+                  'Felitendo',
+                  'FeloStore',
+                  value!.versionName,
+                  value.versionName!,
+                  [],
+                  0,
+                  {
                     'versionDetection': true,
                     'apkFilterRegEx': 'fdroid',
                     'invertAPKFilter': true
                   },
-                  pinned: false,
-                  categories: [],
+                  null,
+                  false,
                 )
               ], onlyIfExists: false);
             }
@@ -240,13 +242,15 @@ class _FeloStoreState extends State<FeloStore> {
             if (value?.versionName != null) {
               appsProvider.saveApps([
                 App(
-                  id: duolingoId,
-                  url: duolingoUrl,
-                  author: 'FeloMods',
-                  name: 'Duolingo',
-                  installedVersion: value!.versionName,
-                  latestVersion: value.versionName!,
-                  additionalSettings: {
+                  duolingoId,
+                  duolingoUrl,
+                  'FeloMods',
+                  'Duolingo',
+                  value!.versionName,
+                  value.versionName!,
+                  [],
+                  0,
+                  {
                     'includePrereleases': false,
                     'fallbackToOlderReleases': true,
                     'filterReleaseTitlesByRegEx': '',
@@ -268,9 +272,9 @@ class _FeloStoreState extends State<FeloStore> {
                     'skipUpdateNotifications': false,
                     'about': ''
                   },
-                  pinned: false,
-                  categories: [],
-                  overrideSource: 'Codeberg',
+                  null,
+                  false,
+                  'Codeberg',
                 )
               ], onlyIfExists: false);
             }
