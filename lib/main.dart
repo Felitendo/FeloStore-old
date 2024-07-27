@@ -16,8 +16,11 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:easy_localization/easy_localization.dart';
+<<<<<<< HEAD
 import 'package:flutter/services.dart' show rootBundle; // Spezifischer Import
 
+=======
+>>>>>>> parent of 3598b81 (Update main.dart)
 // ignore: implementation_imports
 import 'package:easy_localization/src/easy_localization_controller.dart';
 // ignore: implementation_imports
@@ -137,7 +140,6 @@ class _ObtainiumState extends State<Obtainium> {
   void initState() {
     super.initState();
     initPlatformState();
-    checkFirstRun();
   }
 
   Future<void> initPlatformState() async {
@@ -159,55 +161,6 @@ class _ObtainiumState extends State<Obtainium> {
       BackgroundFetch.finish(taskId);
     });
     if (!mounted) return;
-  }
-
-  Future<void> checkFirstRun() async {
-    SettingsProvider settingsProvider = context.read<SettingsProvider>();
-    await settingsProvider.initializeSettings(); // Sicherstellen, dass Einstellungen geladen sind
-    bool isFirstRun = settingsProvider.checkAndFlipFirstRun(); 
-    if (isFirstRun) {
-      await loadImportConfig();
-    }
-  }
-
-  Future<void> loadImportConfig() async {
-    try {
-      // Pfad zur Konfigurationsdatei im Assets-Verzeichnis
-      const configFilePath = 'assets/config.json';
-
-      // Lade die Konfigurationsdatei aus den Assets
-      String data = await rootBundle.loadString(configFilePath);
-
-      // Überprüfe ob die Datei gültige JSON-Daten enthält
-      jsonDecode(data);
-
-      // Importiere die Daten
-      setState(() {
-        // importInProgress = true; // Siehe Hinweis unten
-      });
-      var appsProvider = context.read<AppsProvider>(); // Kontext beachten
-      var settingsProvider = context.read<SettingsProvider>(); // Kontext beachten
-      var value = await appsProvider.import(data);
-      var cats = settingsProvider.categories;
-      appsProvider.apps.forEach((key, value) {
-        for (var c in value.app.categories) {
-          if (!cats.containsKey(c)) {
-            cats[c] = generateRandomLightColor().value; // Diese Methode muss definiert sein
-          }
-        }
-      });
-      appsProvider.addMissingCategories(settingsProvider);
-      showMessage(
-        '${tr('importedX', args: [plural('apps', value.key.length)])}${value.value ? ' + ${tr('settings')}' : ''}',
-        context,
-      );
-    } catch (e) {
-      showError(e, context);
-    } finally {
-      setState(() {
-        // importInProgress = false; // Siehe Hinweis unten
-      });
-    }
   }
 
   @override
