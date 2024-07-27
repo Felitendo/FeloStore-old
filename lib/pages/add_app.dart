@@ -1,18 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:obtainium/components/custom_app_bar.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/components/generated_form_modal.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/main.dart';
-import 'package:obtainium/pages/app.dart';
-import 'package:obtainium/pages/import_export.dart';
-import 'package:obtainium/pages/settings.dart';
-import 'package:obtainium/providers/apps_provider.dart';
-import 'package:obtainium/providers/notifications_provider.dart';
-import 'package:obtainium/providers/settings_provider.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/components/custom_app_bar.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/components/generated_form_modal.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/main.dart';
+import 'package:felostore/pages/app.dart';
+import 'package:felostore/pages/import_export.dart';
+import 'package:felostore/pages/settings.dart';
+import 'package:felostore/providers/apps_provider.dart';
+import 'package:felostore/providers/notifications_provider.dart';
+import 'package:felostore/providers/settings_provider.dart';
+import 'package:felostore/providers/source_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -162,7 +162,7 @@ class AddAppPageState extends State<AddAppPage> {
             var apkUrl =
                 await appsProvider.confirmAppFileUrl(app, context, false);
             if (apkUrl == null) {
-              throw ObtainiumError(tr('cancelled'));
+              throw FeloStoreError(tr('cancelled'));
             }
             app.preferredApkIndex =
                 app.apkUrls.map((e) => e.value).toList().indexOf(apkUrl.value);
@@ -180,7 +180,7 @@ class AddAppPageState extends State<AddAppPage> {
             app.id = downloadedFile?.appId ?? downloadedDir!.appId;
           }
           if (appsProvider.apps.containsKey(app.id)) {
-            throw ObtainiumError(tr('appAlreadyAdded'));
+            throw FeloStoreError(tr('appAlreadyAdded'));
           }
           if (app.additionalSettings['trackOnly'] == true ||
               app.additionalSettings['versionDetection'] != true) {
@@ -225,7 +225,7 @@ class AddAppPageState extends State<AddAppPage> {
                                 } catch (e) {
                                   return e is String
                                       ? e
-                                      : e is ObtainiumError
+                                      : e is FeloStoreError
                                           ? e.toString()
                                           : tr('error');
                                 }
@@ -361,7 +361,7 @@ class AddAppPageState extends State<AddAppPage> {
             si++;
           }
           if (res.isEmpty) {
-            throw ObtainiumError(tr('noResults'));
+            throw FeloStoreError(tr('noResults'));
           }
           List<String>? selectedUrls = res.isEmpty
               ? []

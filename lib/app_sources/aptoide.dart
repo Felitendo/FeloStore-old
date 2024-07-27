@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class Aptoide extends AppSource {
   Aptoide() {
@@ -36,7 +36,7 @@ class Aptoide extends AppSource {
       String standardUrl, Map<String, dynamic> additionalSettings) async {
     var res = await sourceRequest(standardUrl, additionalSettings);
     if (res.statusCode != 200) {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
     var idMatch = RegExp('"app":{"id":[0-9]+').firstMatch(res.body);
     String? id;
@@ -48,7 +48,7 @@ class Aptoide extends AppSource {
     var res2 = await sourceRequest(
         'https://ws2.aptoide.com/api/7/getApp/app_id/$id', additionalSettings);
     if (res2.statusCode != 200) {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
     return jsonDecode(res2.body)?['nodes']?['meta']?['data'];
   }

@@ -10,7 +10,7 @@ const neverAutoTranslate = {
     steamMobile: ['*'],
     steamChat: ['*'],
     root: ['*'],
-    obtainiumExportHyphenatedLowercase: ['*'],
+    felostoreExportHyphenatedLowercase: ['*'],
     theme: ['de'],
     appId: ['de']
 }

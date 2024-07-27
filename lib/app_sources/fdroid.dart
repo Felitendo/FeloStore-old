@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
-import 'package:obtainium/app_sources/github.dart';
-import 'package:obtainium/app_sources/gitlab.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/github.dart';
+import 'package:felostore/app_sources/gitlab.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class FDroid extends AppSource {
   FDroid() {
@@ -151,7 +151,7 @@ class FDroid extends AppSource {
       });
       return urlsWithDescriptions;
     } else {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 
@@ -244,7 +244,7 @@ class FDroid extends AppSource {
       return APKDetails(version, getApkUrlsFromUrls(apkUrls.toSet().toList()),
           AppNames(sourceName, Uri.parse(standardUrl).pathSegments.last));
     } else {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 }

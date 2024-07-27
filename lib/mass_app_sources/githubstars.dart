@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart';
-import 'package:obtainium/app_sources/github.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/app_sources/github.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class GitHubStars implements MassAppUrlSource {
   @override
@@ -35,7 +35,7 @@ class GitHubStars implements MassAppUrlSource {
     } else {
       var gh = GitHub();
       gh.rateLimitErrorCheck(res);
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 
@@ -43,7 +43,7 @@ class GitHubStars implements MassAppUrlSource {
   Future<Map<String, List<String>>> getUrlsWithDescriptions(
       List<String> args) async {
     if (args.length != requiredArgs.length) {
-      throw ObtainiumError(tr('wrongArgNum'));
+      throw FeloStoreError(tr('wrongArgNum'));
     }
     Map<String, List<String>> urlsWithDescriptions = {};
     var page = 1;

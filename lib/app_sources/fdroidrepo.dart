@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
-import 'package:obtainium/components/generated_form.dart';
-import 'package:obtainium/custom_errors.dart';
-import 'package:obtainium/providers/source_provider.dart';
+import 'package:felostore/components/generated_form.dart';
+import 'package:felostore/custom_errors.dart';
+import 'package:felostore/providers/source_provider.dart';
 
 class FDroidRepo extends AppSource {
   FDroidRepo() {
@@ -82,7 +82,7 @@ class FDroidRepo extends AppSource {
       });
       return results;
     } else {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 
@@ -188,7 +188,7 @@ class FDroidRepo extends AppSource {
         }).toList();
       }
       if (foundApps.isEmpty) {
-        throw ObtainiumError(tr('appWithIdOrNameNotFound'));
+        throw FeloStoreError(tr('appWithIdOrNameNotFound'));
       }
       var authorName = body.querySelector('repo')?.attributes['name'] ?? name;
       String appId = foundApps[0].attributes['id']!;
@@ -221,7 +221,7 @@ class FDroidRepo extends AppSource {
           AppNames(authorName, appName),
           releaseDate: releaseDate);
     } else {
-      throw getObtainiumHttpError(res);
+      throw getFeloStoreHttpError(res);
     }
   }
 }
