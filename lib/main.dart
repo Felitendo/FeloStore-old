@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:obtainium/pages/home.dart';
@@ -15,9 +15,11 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter/services.dart' show rootBundle; // Specific import
+
+// Replace this with your App model definition.
+import 'package:obtainium/models/app.dart';
 
 List<MapEntry<Locale, String>> supportedLocales = const [
   MapEntry(Locale('en'), 'English'),
@@ -48,27 +50,10 @@ var fdroid = false;
 final globalNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> loadTranslations() async {
-  await EasyLocalizationController.initEasyLocation();
+  // Initialize settings to get the forced locale if any.
   var s = SettingsProvider();
   await s.initializeSettings();
   var forceLocale = s.forcedLocale;
-  final controller = EasyLocalizationController(
-    saveLocale: true,
-    forceLocale: forceLocale != null ? Locale(forceLocale) : null,
-    fallbackLocale: fallbackLocale,
-    supportedLocales: supportedLocales.map((e) => e.key).toList(),
-    assetLoader: const RootBundleAssetLoader(),
-    useOnlyLangCode: true,
-    useFallbackTranslations: true,
-    path: localeDir,
-    onLoadError: (FlutterError e) {
-      throw e;
-    },
-  );
-  await controller.loadTranslations();
-  Localization.load(controller.locale,
-      translations: controller.translations,
-      fallbackTranslations: controller.fallbackTranslations);
 }
 
 @pragma('vm:entry-point')
@@ -188,6 +173,25 @@ class _ObtainiumState extends State<Obtainium> {
     } catch (e) {
       showError(e, context);
     }
+  }
+
+  void showMessage(String message, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void showError(dynamic error, BuildContext context) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Error: $error')));
+  }
+
+  Color generateRandomLightColor() {
+    final random = Random();
+    return Color.fromRGBO(
+      200 + random.nextInt(55),
+      200 + random.nextInt(55),
+      200 + random.nextInt(55),
+      1,
+    );
   }
 
   @override
