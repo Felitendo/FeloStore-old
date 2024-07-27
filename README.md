@@ -7,7 +7,7 @@ Get Android App Updates Directly From the Source.
 FeloStore allows you to install and update apps directly from their releases pages, and receive notifications when new releases are made available.
 
 More info:
-- [FeloStore/wiki](https://github.com/ImranR98/FeloStore/wiki)
+- [FeloStore/wiki](https://github.com/Felitendo/FeloStore/wiki)
 - [AppVerifier](https://github.com/soupslurpr/AppVerifier) - App verification tool (recommended, integrates with FeloStore)
 - [apps.felostore.felitendo.dev](https://apps.felostore.felitendo.dev/) - Crowdsourced app configurations
 - [Side Of Burritos - You should use this instead of F-Droid | How to use app RSS feed](https://youtu.be/FFz57zNR_M0) - Original motivation for this app
@@ -42,15 +42,15 @@ Currently supported App sources:
 
 You can find crowdsourced app configurations at [apps.felostore.felitendo.dev](https://apps.felostore.felitendo.dev).
 
-If you can't find the configuration for an app you want, feel free to leave a request on the [discussions page](https://github.com/ImranR98/apps.felostore.felitendo.dev/discussions/new?category=app-requests).
+If you can't find the configuration for an app you want, feel free to leave a request on the [discussions page](https://github.com/Felitendo/apps.felostore.felitendo.dev/discussions/new?category=app-requests).
 
-Or, contribute some configurations to the website by creating a PR at [this repo](https://github.com/ImranR98/apps.felostore.felitendo.dev).
+Or, contribute some configurations to the website by creating a PR at [this repo](https://github.com/Felitendo/apps.felostore.felitendo.dev).
 
 ## Installation
 
 [<img src="https://github.com/machiav3lli/oandbackupx/blob/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png"
     alt="Get it on GitHub"
-    height="80">](https://github.com/ImranR98/FeloStore/releases)
+    height="80">](https://github.com/Felitendo/FeloStore/releases)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
      alt="Get it on IzzyOnDroid"
      height="80">](https://apt.izzysoft.de/fdroid/index/apk/dev.felitendo.felostore)

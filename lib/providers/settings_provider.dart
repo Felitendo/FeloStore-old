@@ -16,7 +16,9 @@ import 'package:shared_storage/shared_storage.dart' as saf;
 
 String felostoreTempId = 'felitendo_felostore_${GitHub().hosts[0]}';
 String felostoreId = 'dev.felitendo.felostore';
-String felostoreUrl = 'https://github.com/ImranR98/FeloStore';
+String felostoreUrl = 'https://github.com/Felitendo/FeloStore';
+String duolingoId = 'com.duolingo'
+String duolingoUrl = 'https://git.felo.gg/FeloMods/Duolingo';
 Color felostoreThemeColor = const Color(0xFF6438B5);
 
 enum ThemeSettings { system, light, dark }
@@ -30,7 +32,7 @@ class SettingsProvider with ChangeNotifier {
   String? defaultAppDir;
   bool justStarted = true;
 
-  String sourceUrl = 'https://github.com/ImranR98/FeloStore';
+  String sourceUrl = 'https://github.com/Felitendo/FeloStore';
 
   // Not done in constructor as we want to be able to await it
   Future<void> initializeSettings() async {

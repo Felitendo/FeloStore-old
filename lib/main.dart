@@ -199,54 +199,90 @@ class _FeloStoreState extends State<FeloStore> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
-    AppsProvider appsProvider = context.read<AppsProvider>();
-    LogsProvider logs = context.read<LogsProvider>();
+Widget build(BuildContext context) {
+  SettingsProvider settingsProvider = context.watch<SettingsProvider>();
+  AppsProvider appsProvider = context.read<AppsProvider>();
+  LogsProvider logs = context.read<LogsProvider>();
 
-    if (settingsProvider.prefs == null) {
-      settingsProvider.initializeSettings();
-    } else {
-      bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
-      if (isFirstRun) {
-        logs.add('This is the first ever run of FeloStore.');
-        Permission.notification.request();
-        if (!fdroid) {
-          getInstalledInfo(felostoreId).then((value) {
-            if (value?.versionName != null) {
-              appsProvider.saveApps([
-                App(
-                    felostoreId,
-                    felostoreUrl,
-                    'ImranR98',
-                    'FeloStore',
-                    value!.versionName,
-                    value.versionName!,
-                    [],
-                    0,
-                    {
-                      'versionDetection': true,
-                      'apkFilterRegEx': 'fdroid',
-                      'invertAPKFilter': true
-                    },
-                    null,
-                    false)
-              ], onlyIfExists: false);
-            }
-          }).catchError((err) {
-            print(err);
-          });
-        }
-      }
-      if (!supportedLocales
-              .map((e) => e.key.languageCode)
-              .contains(context.locale.languageCode) ||
-          (settingsProvider.forcedLocale == null &&
-              context.deviceLocale.languageCode !=
-                  context.locale.languageCode)) {
-        settingsProvider.resetLocaleSafe(context);
+  if (settingsProvider.prefs == null) {
+    settingsProvider.initializeSettings();
+  } else {
+    bool isFirstRun = settingsProvider.checkAndFlipFirstRun();
+    if (isFirstRun) {
+      logs.add('This is the first ever run of FeloStore.');
+      Permission.notification.request();
+
+      if (!fdroid) {
+        getInstalledInfo(felostoreId).then((value) {
+          if (value?.versionName != null) {
+            appsProvider.saveApps([
+              App(
+                id: felostoreId,
+                url: felostoreUrl,
+                author: 'Felitendo',
+                name: 'FeloStore',
+                installedVersion: value!.versionName,
+                latestVersion: value.versionName!,
+                additionalSettings: {
+                  'versionDetection': true,
+                  'apkFilterRegEx': 'fdroid',
+                  'invertAPKFilter': true
+                },
+                pinned: false,
+                categories: [],
+              )
+            ], onlyIfExists: false);
+          }
+        }).catchError((err) {
+          print(err);
+        });
+
+        getInstalledInfo(duolingoId).then((value) {
+          if (value?.versionName != null) {
+            appsProvider.saveApps([
+          App(
+            id: duolingoId,
+            url: duolingoUrl,
+            author: 'FeloMods',
+            name: 'Duolingo',
+            installedVersion: value!.versionName,
+            latestVersion: value.versionName!,
+            additionalSettings: {
+                'includePrereleases': false,
+                'fallbackToOlderReleases': true,
+                'filterReleaseTitlesByRegEx': '',
+                'filterReleaseNotesByRegEx': '',
+                'verifyLatestTag': false,
+                'dontSortReleasesList': false,
+                'useLatestAssetDateAsReleaseDate': false,
+                'trackOnly': false,
+                'versionExtractionRegEx': '',
+                'matchGroupToUse': '',
+                'versionDetection': true,
+                'useVersionCodeAsOSVersion': false,
+                'apkFilterRegEx': '',
+                'invertAPKFilter': false,
+                'autoApkFilterByArch': true,
+                'appName': '',
+                'shizukuPretendToBeGooglePlay': false,
+                'exemptFromBackgroundUpdates': false,
+                'skipUpdateNotifications': false,
+                'about': ''
+                },
+            pinned: false,
+            categories: [],
+            overrideSource: 'Codeberg',
+          ),
+        ], onlyIfExists: false);
+          }
       }
     }
+    if (!supportedLocales.map((e) => e.key.languageCode).contains(context.locale.languageCode) ||
+        (settingsProvider.forcedLocale == null && context.deviceLocale.languageCode != context.locale.languageCode)) {
+      settingsProvider.resetLocaleSafe(context);
+    }
+  }
+}
 
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
