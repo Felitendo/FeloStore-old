@@ -1,4 +1,4 @@
-// Manages state related to the list of Apps tracked by FeloStore,
+// Manages state related to the list of Apps tracked by Obtainium,
 // Exposes related functions such as those used to add, remove, download, and install Apps.
 
 import 'dart:async';
@@ -17,18 +17,18 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:felostore/components/generated_form.dart';
-import 'package:felostore/components/generated_form_modal.dart';
-import 'package:felostore/custom_errors.dart';
-import 'package:felostore/main.dart';
-import 'package:felostore/providers/logs_provider.dart';
-import 'package:felostore/providers/notifications_provider.dart';
-import 'package:felostore/providers/settings_provider.dart';
+import 'package:obtainium/components/generated_form.dart';
+import 'package:obtainium/components/generated_form_modal.dart';
+import 'package:obtainium/custom_errors.dart';
+import 'package:obtainium/main.dart';
+import 'package:obtainium/providers/logs_provider.dart';
+import 'package:obtainium/providers/notifications_provider.dart';
+import 'package:obtainium/providers/settings_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
-import 'package:felostore/providers/source_provider.dart';
+import 'package:obtainium/providers/source_provider.dart';
 import 'package:http/http.dart';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter_archive/flutter_archive.dart';
@@ -196,7 +196,7 @@ Future<String> checkPartialDownloadHash(String url, int bytesToGrab,
   var client = http.Client();
   var response = await client.send(req);
   if (response.statusCode < 200 || response.statusCode > 299) {
-    throw FeloStoreError(response.reasonPhrase ?? tr('unexpectedError'));
+    throw ObtainiumError(response.reasonPhrase ?? tr('unexpectedError'));
   }
   List<List<int>> bytes = await response.stream.take(bytesToGrab).toList();
   return hashListOfLists(bytes);
@@ -324,7 +324,7 @@ Future<Map<String, String>> getHeaders(String url,
   var client = http.Client();
   var response = await client.send(req);
   if (response.statusCode < 200 || response.statusCode > 299) {
-    throw FeloStoreError(response.reasonPhrase ?? tr('unexpectedError'));
+    throw ObtainiumError(response.reasonPhrase ?? tr('unexpectedError'));
   }
   var returnHeaders = response.headers;
   client.close();
@@ -490,7 +490,7 @@ class AppsProvider with ChangeNotifier {
       }
       if (newInfo == null) {
         downloadedFile.delete();
-        throw FeloStoreError('Could not get ID from APK');
+        throw ObtainiumError('Could not get ID from APK');
       }
       downloadedFile =
           await handleAPKIDChange(app, newInfo, downloadedFile, downloadUrl);
@@ -555,10 +555,10 @@ class AppsProvider with ChangeNotifier {
       return true;
     }
 
-    if (app.id == felostoreId) {
+    if (app.id == obtainiumId) {
       return false;
     }
-    if (installerPackageName != felostoreId) {
+    if (installerPackageName != obtainiumId) {
       // If we did not install the app, silent install is not possible
       return false;
     }
@@ -647,7 +647,7 @@ class AppsProvider with ChangeNotifier {
       } catch (e) {
         //
       } finally {
-        throw FeloStoreError(tr('badDownload'));
+        throw ObtainiumError(tr('badDownload'));
       }
     }
     PackageInfo? appInfo = await getInstalledInfo(apps[file.appId]!.app.id);
@@ -788,7 +788,7 @@ class AppsProvider with ChangeNotifier {
     // 2. That cannot be installed silently (IF no buildContext was given for interactive install)
     for (var id in appIds) {
       if (apps[id] == null) {
-        throw FeloStoreError(tr('appNotFound'));
+        throw ObtainiumError(tr('appNotFound'));
       }
       MapEntry<String, String>? apkUrl;
       var trackOnly = apps[id]!.app.additionalSettings['trackOnly'] == true;
@@ -826,9 +826,9 @@ class AppsProvider with ChangeNotifier {
     MultiAppMultiError errors = MultiAppMultiError();
     List<String> installedIds = [];
 
-    // Move FeloStore to the end of the line (let all other apps update first)
+    // Move Obtainium to the end of the line (let all other apps update first)
     appsToInstall =
-        moveStrToEnd(appsToInstall, felostoreId, strB: felostoreTempId);
+        moveStrToEnd(appsToInstall, obtainiumId, strB: obtainiumTempId);
 
     Future<void> installFn(String id, bool willBeSilent,
         DownloadedApk? downloadedFile, DownloadedXApkDir? downloadedDir) async {
@@ -908,18 +908,18 @@ class AppsProvider with ChangeNotifier {
         willBeSilent = await canInstallSilently(apps[id]!.app);
         if (!settingsProvider.useShizuku) {
           if (!(await settingsProvider.getInstallPermission(enforce: false))) {
-            throw FeloStoreError(tr('cancelled'));
+            throw ObtainiumError(tr('cancelled'));
           }
         } else {
           switch ((await ShizukuApkInstaller.checkPermission())!) {
             case 'binder_not_found':
-              throw FeloStoreError(tr('shizukuBinderNotFound'));
+              throw ObtainiumError(tr('shizukuBinderNotFound'));
             case 'old_shizuku':
-              throw FeloStoreError(tr('shizukuOld'));
+              throw ObtainiumError(tr('shizukuOld'));
             case 'old_android_with_adb':
-              throw FeloStoreError(tr('shizukuOldAndroidWithADB'));
+              throw ObtainiumError(tr('shizukuOldAndroidWithADB'));
             case 'denied':
-              throw FeloStoreError(tr('cancelled'));
+              throw ObtainiumError(tr('cancelled'));
           }
         }
         if (!willBeSilent && context != null && !settingsProvider.useShizuku) {
@@ -971,7 +971,7 @@ class AppsProvider with ChangeNotifier {
     List<MapEntry<MapEntry<String, String>, App>> filesToDownload = [];
     for (var id in appIds) {
       if (apps[id] == null) {
-        throw FeloStoreError(tr('appNotFound'));
+        throw ObtainiumError(tr('appNotFound'));
       }
       MapEntry<String, String>? fileUrl;
       if (apps[id]!.app.apkUrls.isNotEmpty ||
@@ -1345,7 +1345,7 @@ class AppsProvider with ChangeNotifier {
                 : [
                     [
                       GeneratedFormSwitch('rmAppEntry',
-                          label: tr('removeFromFeloStore'), defaultValue: true)
+                          label: tr('removeFromObtainium'), defaultValue: true)
                     ],
                     [
                       GeneratedFormSwitch('uninstallApp',
@@ -1544,11 +1544,11 @@ class AppsProvider with ChangeNotifier {
       }
       var result = await saf.createFile(exportDir,
           displayName:
-              '${tr('felostoreExportHyphenatedLowercase')}-${DateTime.now().toIso8601String().replaceAll(':', '-')}${isAuto ? '-auto' : ''}.json',
+              '${tr('obtainiumExportHyphenatedLowercase')}-${DateTime.now().toIso8601String().replaceAll(':', '-')}${isAuto ? '-auto' : ''}.json',
           mimeType: 'application/json',
           bytes: Uint8List.fromList(utf8.encode(jsonEncode(finalExport))));
       if (result == null) {
-        throw FeloStoreError(tr('unexpectedError'));
+        throw ObtainiumError(tr('unexpectedError'));
       }
       returnPath =
           exportDir.pathSegments.join('/').replaceFirst('tree/primary:', '/');
@@ -1962,9 +1962,9 @@ Future<void> bgUpdateCheck(String taskId, Map<String, dynamic>? params) async {
     }
     if (toInstall.isNotEmpty) {
       logs.add('BG install task: Started (${toInstall.length}).');
-      var tempObtArr = toInstall.where((element) => element.key == felostoreId);
+      var tempObtArr = toInstall.where((element) => element.key == obtainiumId);
       if (tempObtArr.isNotEmpty) {
-        // Move felostore to the end of the list as it must always install last
+        // Move obtainium to the end of the list as it must always install last
         var obt = tempObtArr.first;
         toInstall = moveStrToEndMapEntryWithCount(toInstall, obt);
       }

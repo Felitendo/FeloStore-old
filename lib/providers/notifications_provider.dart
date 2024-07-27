@@ -1,11 +1,11 @@
 // Exposes functions that can be used to send notifications to the user
-// Contains a set of pre-defined FeloStoreNotification objects that should be used throughout the app
+// Contains a set of pre-defined ObtainiumNotification objects that should be used throughout the app
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:felostore/providers/source_provider.dart';
+import 'package:obtainium/providers/source_provider.dart';
 
-class FeloStoreNotification {
+class ObtainiumNotification {
   late int id;
   late String title;
   late String message;
@@ -16,12 +16,12 @@ class FeloStoreNotification {
   int? progPercent;
   bool onlyAlertOnce;
 
-  FeloStoreNotification(this.id, this.title, this.message, this.channelCode,
+  ObtainiumNotification(this.id, this.title, this.message, this.channelCode,
       this.channelName, this.channelDescription, this.importance,
       {this.onlyAlertOnce = false, this.progPercent});
 }
 
-class UpdateNotification extends FeloStoreNotification {
+class UpdateNotification extends ObtainiumNotification {
   UpdateNotification(List<App> updates, {int? id})
       : super(
             id ?? 2,
@@ -40,7 +40,7 @@ class UpdateNotification extends FeloStoreNotification {
   }
 }
 
-class SilentUpdateNotification extends FeloStoreNotification {
+class SilentUpdateNotification extends ObtainiumNotification {
   SilentUpdateNotification(List<App> updates, bool succeeded, {int? id})
       : super(
             id ?? 3,
@@ -64,7 +64,7 @@ class SilentUpdateNotification extends FeloStoreNotification {
   }
 }
 
-class SilentUpdateAttemptNotification extends FeloStoreNotification {
+class SilentUpdateAttemptNotification extends ObtainiumNotification {
   SilentUpdateAttemptNotification(List<App> updates, {int? id})
       : super(
             id ?? 3,
@@ -82,7 +82,7 @@ class SilentUpdateAttemptNotification extends FeloStoreNotification {
   }
 }
 
-class ErrorCheckingUpdatesNotification extends FeloStoreNotification {
+class ErrorCheckingUpdatesNotification extends ObtainiumNotification {
   ErrorCheckingUpdatesNotification(String error, {int? id})
       : super(
             id ?? 5,
@@ -94,7 +94,7 @@ class ErrorCheckingUpdatesNotification extends FeloStoreNotification {
             Importance.high);
 }
 
-class AppsRemovedNotification extends FeloStoreNotification {
+class AppsRemovedNotification extends ObtainiumNotification {
   AppsRemovedNotification(List<List<String>> namedReasons)
       : super(
             6,
@@ -112,7 +112,7 @@ class AppsRemovedNotification extends FeloStoreNotification {
   }
 }
 
-class DownloadNotification extends FeloStoreNotification {
+class DownloadNotification extends ObtainiumNotification {
   DownloadNotification(String appName, int progPercent)
       : super(
             appName.hashCode,
@@ -126,7 +126,7 @@ class DownloadNotification extends FeloStoreNotification {
             progPercent: progPercent);
 }
 
-class DownloadedNotification extends FeloStoreNotification {
+class DownloadedNotification extends ObtainiumNotification {
   DownloadedNotification(String fileName, String downloadUrl)
       : super(
             downloadUrl.hashCode,
@@ -138,16 +138,16 @@ class DownloadedNotification extends FeloStoreNotification {
             Importance.defaultImportance);
 }
 
-final completeInstallationNotification = FeloStoreNotification(
+final completeInstallationNotification = ObtainiumNotification(
     1,
     tr('completeAppInstallation'),
-    tr('felostoreMustBeOpenToInstallApps'),
+    tr('obtainiumMustBeOpenToInstallApps'),
     'COMPLETE_INSTALL',
     tr('completeAppInstallationNotifChannel'),
     tr('completeAppInstallationNotifDescription'),
     Importance.max);
 
-class CheckingUpdatesNotification extends FeloStoreNotification {
+class CheckingUpdatesNotification extends ObtainiumNotification {
   CheckingUpdatesNotification(String appName)
       : super(
             4,
@@ -214,7 +214,7 @@ class NotificationsProvider {
                 channelDescription: channelDescription,
                 importance: importance,
                 priority: importanceToPriority[importance]!,
-                groupKey: 'dev.felitendo.felostore.$channelCode',
+                groupKey: 'dev.imranr.obtainium.$channelCode',
                 progress: progPercent ?? 0,
                 maxProgress: 100,
                 showProgress: progPercent != null,
@@ -222,7 +222,7 @@ class NotificationsProvider {
                 indeterminate: progPercent != null && progPercent < 0)));
   }
 
-  Future<void> notify(FeloStoreNotification notif,
+  Future<void> notify(ObtainiumNotification notif,
           {bool cancelExisting = false}) =>
       notifyRaw(notif.id, notif.title, notif.message, notif.channelCode,
           notif.channelName, notif.channelDescription, notif.importance,
