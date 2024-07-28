@@ -231,6 +231,7 @@ class _FeloStoreState extends State<FeloStore> {
                   },
                   null,
                   false,
+                  'GitHub',
                 )
               ], onlyIfExists: false);
             }
